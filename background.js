@@ -199,13 +199,33 @@ function syncLovableAuth(tabUrl, hintProjectId, done) {
   });
 }
 
+function updateActionForTab(tabId, url) {
+  var isLovable = url && url.indexOf("lovable.dev") !== -1;
+  if (isLovable) {
+    chrome.action.enable(tabId);
+  } else {
+    chrome.action.disable(tabId);
+  }
+}
+
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  if (!tab || !tab.url) return;
+  if (changeInfo.status === "complete") {
+    updateActionForTab(tabId, tab.url);
+  }
   if (changeInfo.status !== "complete" || !tab || !tab.url) return;
   if (tab.url.indexOf("lovable.dev") === -1) return;
   syncLovableAuth(tab.url, "", function() {
     try {
       chrome.tabs.sendMessage(tabId, { action: "requestTokenRefresh" }, function() {});
     } catch (e) {}
+  });
+});
+
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  chrome.tabs.get(activeInfo.tabId, function(tab) {
+    if (chrome.runtime.lastError || !tab) return;
+    updateActionForTab(activeInfo.tabId, tab.url);
   });
 });
 
@@ -231,6 +251,8 @@ async function openPowerkitsSidePanel(tab) {
 }
 
 enableActionSidePanel();
+// Start with icon disabled — enabled only on lovable.dev tabs
+chrome.action.disable();
 chrome.storage.local.set({ ql_sidebar_mode: true });
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -239,6 +261,7 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 chrome.runtime.onStartup.addListener(() => {
+  chrome.action.disable();
   enableActionSidePanel();
 });
 
