@@ -34,7 +34,6 @@
   _f('GRINGOW_API_BASE', _e.b);
   _f('GRINGOW_API_KEY', _e.k);
   _f('DISCORD_SUPPORT_URL', _e.w);
-  _f('PROXY_COMMAND_URL', _e.b + '/functions/v1/proxy-command');
   _f('SEND_STRATEGY', 'native');
   _f('POWERKITS_DEBUG', false);
   _f('INTERNAL_LICENSE_MODE', true);
