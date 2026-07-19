@@ -154,9 +154,7 @@ body { animation: sp-fade-in 0.4s ease-out; }
 .sp-back-to-popup { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--ql-text-muted); background: none; border: 1px solid var(--ql-border); border-radius: var(--ql-radius-xs); padding: 4px 10px; cursor: pointer; transition: all var(--ql-transition); font-family: inherit; }
 .sp-back-to-popup:hover { background: var(--ql-bg-hover); color: var(--ql-text-primary); border-color: var(--ql-border-hover); }
 
-.sp-support-link { display: flex; align-items: center; gap: 5px; color: var(--ql-text-muted); text-decoration: none; font-size: 11px; font-weight: 600; transition: color var(--ql-transition); }
-.sp-support-link:hover { color: var(--ql-accent); }
-.sp-support-link svg { width: 12px; height: 12px; }
+/* (support link removed in v2.0) */
 
 /* Modal Modo Plano */
 .sp-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); animation: sp-fadeIn 0.2s ease; }

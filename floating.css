@@ -1014,23 +1014,7 @@
   color: var(--ql-text-muted);
   opacity: 0.5;
 }
-.ql-support-link {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--ql-text-muted);
-  text-decoration: none;
-  font-size: 11px;
-  font-weight: 600;
-  transition: color var(--ql-transition);
-  cursor: pointer;
-}
-.ql-support-link:hover {
-  color: var(--ql-accent);
-}
-.ql-support-link svg {
-  flex-shrink: 0;
-}
+/* (support link removed in v2.0) */
 
 .ql-badge-mz {
   font-size: 9px;

@@ -1536,7 +1536,7 @@ async function showPaymentUI(box, preselectedPkg){
     const list = document.getElementById("ql-packages-list");
     if(!list) return;
     if(!packages || !Array.isArray(packages) || packages.length === 0){
-      list.innerHTML = '<div class="ql-pay-loading">Open Discord Support</div>';
+      list.innerHTML = '<div class="ql-pay-loading">⚠ Feature available in side panel</div>';
       return;
     }
 
@@ -1556,7 +1556,7 @@ async function showPaymentUI(box, preselectedPkg){
   } catch(err) {
     console.error("[QL] Package load error:", err);
     const list = document.getElementById("ql-packages-list");
-    if(list) list.innerHTML = '<div class="ql-pay-loading">Open Discord Support</div>';
+    list.innerHTML = '<div class="ql-pay-loading">⚠ Feature available in side panel</div>';
   }
 }
 
@@ -1668,15 +1668,15 @@ function showCheckoutScreen(box, pkg){
             }
           }
         } else {
-          const errMsg = (result && result.error) ? result.error : "Discord Support failed. Please try again.";
+          const errMsg = (result && result.error) ? result.error : "Payment failed. Please try again.";
           if(log){ log.className = "ql-pay-log ql-pay-error"; log.textContent = "✗ " + errMsg; }
           confirmBtn.disabled = false;
-          confirmBtn.textContent = "Open Discord Support";
+          confirmBtn.textContent = "Retry";
         }
       } catch(err) {
         if(log){ log.className = "ql-pay-log ql-pay-error"; log.textContent = "✗ " + (err.message || "Connection error."); }
         confirmBtn.disabled = false;
-        confirmBtn.textContent = "Open Discord Support";
+        confirmBtn.textContent = "Retry";
       }
     });
   }
