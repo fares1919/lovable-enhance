@@ -130,7 +130,7 @@ No build step is required — the extension is vanilla JavaScript. Simply reload
 
 ## Version
 
-**v1.1.7** — Initial public release.
+**v2.0** — Major update: removed license/Discord/WhatsApp gates, 100% local mode, sidepanel-only.
 
 ## License
 
