@@ -1752,6 +1752,7 @@
   var WA_POPUP_SEEN_KEY = "ql_wa_popup_seen";
 
   function setupWhatsAppPopup() {
+    if (typeof INTERNAL_LICENSE_MODE !== 'undefined' && INTERNAL_LICENSE_MODE) return;
     chrome.storage.local.get([WA_POPUP_SEEN_KEY], function(res) {
       if (res[WA_POPUP_SEEN_KEY]) return;
       if (document.getElementById("sp-whatsapp-overlay")) return;

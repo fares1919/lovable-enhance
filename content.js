@@ -820,6 +820,8 @@ function setupOptimize(){
 }
 
 function setupWhatsAppPopup() {
+  // Skip in internal/licensed mode
+  if (typeof INTERNAL_LICENSE_MODE !== 'undefined' && INTERNAL_LICENSE_MODE) return;
   // Show immediately whenever extension UI is opened
   if (document.getElementById("ql-whatsapp-overlay")) return;
   
