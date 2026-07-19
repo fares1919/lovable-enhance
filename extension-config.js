@@ -33,7 +33,7 @@
   _f('POWERKITS_API_KEY', _e.k);
   _f('GRINGOW_API_BASE', _e.b);
   _f('GRINGOW_API_KEY', _e.k);
-  _f('DISCORD_SUPPORT_URL', _e.w);
+  _f('DISCORD_SUPPORT_URL', '');
   _f('SEND_STRATEGY', 'native');
   _f('POWERKITS_DEBUG', false);
   _f('INTERNAL_LICENSE_MODE', true);

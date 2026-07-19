@@ -22,11 +22,7 @@ const SVG_ICONS = {
   sidePanel: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/></svg>',
 };
 
-var QL_DISCORD_SUPPORT = (typeof DISCORD_SUPPORT_URL !== "undefined" && DISCORD_SUPPORT_URL)
-  ? DISCORD_SUPPORT_URL
-  : "https://whatsapp.com/channel/0029VahcFkK0AgW2tNSlYf3t";
-
-const PROMPT_TEMPLATES = [
+var PROMPT_TEMPLATES = [
   { icon: SVG_ICONS.wrench, label: "Bugs", prompt: "Analyze the code and identify all bugs, errors, and failures. Fix each one and explain the problem and the solution applied." },
   { icon: SVG_ICONS.edit, label: "Refactor", prompt: "Create a complete step-by-step refactoring and system optimization plan." },
   { icon: SVG_ICONS.shield, label: "Errors", prompt: "Implement robust error handling throughout the code, including try/catch blocks, validations, and user-friendly error messages." },
@@ -37,35 +33,6 @@ const PROMPT_TEMPLATES = [
   { icon: SVG_ICONS.box, label: "Components", prompt: "Reorganize the code into reusable, well-structured components with single responsibilities." },
   { icon: SVG_ICONS.search, label: "Review", prompt: "Perform a complete code review, identifying quality, security, and performance issues and suggesting improvements." },
 ];
-
-// ---- Template: License Gate ----
-function templateLicenseGate(minimized) {
-  return '<div id="ql-header">' +
-    '<div class="ql-header-left">' +
-      '<span class="ql-dot"></span>' +
-      '<img class="ql-title-logo" src="' + chrome.runtime.getURL('assets/logo-master-lovable-square.png') + '" alt=""><span class="ql-title">Lovable Enhance</span>' +
-    '</div>' +
-    '<div class="ql-header-right">' +
-       '<span class="ql-badge">v' + extensionVersionShort() + '</span>' +
-      '<button id="ql-minimize" class="ql-minimize-btn">' + (minimized ? '□' : '−') + '</button>' +
-    '</div>' +
-  '</div>' +
-  '<div id="ql-body">' +
-    '<div class="ql-license-gate">' +
-      '<div class="ql-lock-icon">🔐</div>' +
-      '<p class="ql-gate-title">Activate License</p>' +
-      '<p class="ql-gate-desc">Enter your license key to activate. Paste the key you received from Discord support or your reseller.</p>' +
-      '<div class="ql-field">' +
-        '<input id="ql-license-input" placeholder="Your license key" spellcheck="false">' +
-      '</div>' +
-      '<button id="ql-validate-btn">Validate License</button>' +
-      '<div id="ql-license-log"></div>' +
-      '<div class="ql-gate-divider"><span>Discord support</span></div>' +
-      '<a href="' + QL_DISCORD_SUPPORT + '" target="_blank" rel="noopener noreferrer" class="ql-buy-btn" style="display:block;text-align:center;text-decoration:none">🔑 Request your key via Discord</a>' +
-    '</div>' +
-  '</div>' +
-  '<div id="ql-resize-handle" class="ql-resize-handle"></div>';
-}
 
 // ---- Template: Main UI ----
 function templateMainUI(greeting, statusBadge, minimized) {
@@ -95,12 +62,7 @@ function templateMainUI(greeting, statusBadge, minimized) {
       '</div>' +
       '<div id="ql-trial-countdown" class="ql-trial-countdown" style="display:none"></div>' +
     '</div>' +
-    '<div id="ql-reseller-btn" style="display:none;margin-bottom:14px">' +
-      '<a href="' + QL_DISCORD_SUPPORT + '" target="_blank" rel="noopener noreferrer" class="pk-discord-cta">' +
-        '🔑 Request your key via Discord<span style="margin-left:auto;font-size:10px;opacity:0.6">→</span>' +
-      '</a>' +
-    '</div>' +
-    '<!-- Tabs -->' +
+    '<!-- Tabs -->'
     '<div class="ql-tabs" id="ql-tabs">' +
       '<button class="ql-tab ql-tab-active" data-tab="prompt">⚡ Prompt</button>' +
       '<button class="ql-tab" data-tab="history">💬 History <span class="ql-tab-badge" id="ql-history-badge" style="display:none">0</span></button>' +
@@ -146,7 +108,6 @@ function templateMainUI(greeting, statusBadge, minimized) {
     '</div>' +
   '<div id="ql-footer" class="ql-footer">' +
     '<div class="ql-footer-row">' +
-      '<a href="' + QL_DISCORD_SUPPORT + '" target="_blank" class="ql-support-link">' + SVG_ICONS.headphones + ' Support</a>' +
        '<span class="ql-footer-version">v' + extensionVersionShort() + '</span>' +
     '</div>' +
     '<span class="ql-badge-mz">Lovable Enhance</span>' +
@@ -197,130 +158,6 @@ function qlTemplateUpdateBanner(version, changelog, dlUrl) {
   '</div>';
 }
 
-function templateWhatsAppPopup() {
-  return `
-    <div id="ql-whatsapp-overlay" class="ql-overlay" style="display:flex; align-items:center; justify-content:center; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000000; font-family:sans-serif;">
-      <div style="background:white; padding:30px; border-radius:15px; max-width:400px; text-align:center; position:relative; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
-        <button id="ql-wa-close" style="position:absolute; top:10px; right:10px; border:none; background:none; font-size:20px; cursor:pointer; color:#888;">&times;</button>
-        <div style="font-size:50px; margin-bottom:15px;">📱</div>
-        <h2 style="margin:0 0 10px; color:#25D366;">Join Our Community!</h2>
-        <p style="color:#555; margin-bottom:20px; line-height:1.5;">Stay updated with the latest features, tips, and exclusive updates on our official WhatsApp channel.</p>
-        <a href="https://whatsapp.com/channel/0029VahcFkK0AgW2tNSlYf3t" target="_blank" id="ql-wa-join" style="display:inline-block; background:#25D366; color:white; padding:12px 25px; border-radius:25px; text-decoration:none; font-weight:bold; transition:background 0.3s;">Join WhatsApp Channel</a>
-        <div style="margin-top:15px;">
-          <button id="ql-wa-later" style="background:none; border:none; color:#888; text-decoration:underline; cursor:pointer; font-size:13px;">Maybe later</button>
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// ---- Template: Payment UI (packages list) ----
-var BRL_TO_MZN = 12.6;
-var QL_BRL_PLANS = [
-  { name: "Weekly",  price: "49,90",  period: "per week",      popular: false, badge: "7d",  icon: "⚡",
-    features: ["Full extension access", "Plan Mode workflow", "Support via Discord"] },
-  { name: "Monthly",   price: "97,90",  period: "per month",    popular: true,  badge: "30d", icon: "👑",
-    features: ["Everything in Weekly", "Best value", "Priority support"] },
-  { name: "Lifetime", price: "149,90", period: "one-time payment", popular: false, badge: "∞", icon: "♾️",
-    features: ["Permanent access", "Lifetime updates", "Priority VIP support"] }
-];
-function qlFmtMzn(brl) {
-  var n = parseFloat(String(brl).replace(",", ".")) * BRL_TO_MZN;
-  if (!isFinite(n)) return "0";
-  return Math.round(n).toLocaleString("en-US");
-}
-function templateBrlCard(plan, idx) {
-  var features = plan.features.map(function(f){ return '<li>' + escapeHtml(f) + '</li>'; }).join('');
-  var popular = plan.popular ? '<span class="ql-pkg-popular">⭐ POPULAR</span>' : '';
-  return '<div class="ql-pkg-card ql-pkg-brl' + (plan.popular ? ' ql-pkg-highlight' : '') + '" data-brl-idx="' + idx + '">' +
-    popular +
-    '<div class="ql-pkg-name">' + escapeHtml(plan.icon) + ' ' + escapeHtml(plan.name) + '</div>' +
-    '<div class="ql-pkg-price">R$ ' + escapeHtml(plan.price) + '</div>' +
-    '<div class="ql-pkg-mzn">≈ ' + qlFmtMzn(plan.price) + ' MZN <span>(approx. exchange rate)</span></div>' +
-    '<div class="ql-pkg-duration">' + escapeHtml(plan.period) + '</div>' +
-    '<ul class="ql-pkg-features">' + features + '</ul>' +
-    '<button class="ql-pkg-select-btn ql-brl-buy">💬 Open Discord</button>' +
-  '</div>';
-}
-function templateBrlSection() {
-  var cards = QL_BRL_PLANS.map(function(p, i){ return templateBrlCard(p, i); }).join('');
-  return '<div class="ql-pay-divider"><span>Discord support</span></div>' +
-    '<div class="ql-packages-list ql-brl-list">' + cards + '</div>';
-}
-function templatePaymentUI(minimized) {
-  return '<div id="ql-header">' +
-    '<div class="ql-header-left">' +
-      '<span class="ql-brand"><img class="ql-brand-logo" src="' + chrome.runtime.getURL('assets/logo-master-lovable-square.png') + '" alt=""><span>Lovable Enhance</span></span>' +
-    '</div>' +
-    '<div class="ql-header-right">' +
-      '<button id="ql-pay-back" class="ql-icon-btn" title="Back">←</button>' +
-      '<button id="ql-minimize" class="ql-icon-btn">' + (minimized ? '□' : '−') + '</button>' +
-    '</div>' +
-  '</div>' +
-  '<div id="ql-body">' +
-    '<div class="ql-pay-section">' +
-      '<div class="ql-pay-title">Open Discord support</div>' +
-      templateBrlSection() +
-      '<div class="ql-pay-divider"><span>Discord support</span></div>' +
-      '<div id="ql-packages-list" class="ql-packages-list">' +
-        '<div class="ql-pay-loading">⏳ Open Discord Support</div>' +
-      '</div>' +
-    '</div>' +
-  '</div>' +
-  '<div id="ql-resize-handle" class="ql-resize-handle"></div>';
-}
-
-// ---- Template: Package Card ----
-function templatePackageCard(pkg) {
-  const popular = pkg.is_popular ? '<span class="ql-pkg-popular">⭐ POPULAR</span>' : '';
-  const duration = pkg.duration_days ? escapeHtml(String(pkg.duration_days)) + ' days' : 'Permanent';
-  const features = (pkg.features || []).map(function(f) { return '<li>' + escapeHtml(f) + '</li>'; }).join('');
-  return '<div class="ql-pkg-card' + (pkg.is_popular ? ' ql-pkg-highlight' : '') + '" data-pkg-id="' + escapeHtml(pkg.id) + '" data-pkg-name="' + escapeHtml(pkg.name) + '" data-pkg-price="' + '' + '">' +
-    popular +
-    '<div class="ql-pkg-name">' + escapeHtml(pkg.name) + '</div>' +
-    '<div class="ql-pkg-price">' + '' + '</div>' +
-    '<div class="ql-pkg-duration">' + duration + '</div>' +
-    '<ul class="ql-pkg-features">' + features + '</ul>' +
-    '<button class="ql-pkg-select-btn">Open Discord</button>' +
-  '</div>';
-}
-
-// ---- Template: Checkout Screen ----
-function templateCheckoutScreen(pkg, minimized) {
-  return '<div id="ql-header">' +
-    '<div class="ql-header-left">' +
-      '<span class="ql-brand"><img class="ql-brand-logo" src="' + chrome.runtime.getURL('assets/logo-master-lovable-square.png') + '" alt=""><span>Discord Support</span></span>' +
-    '</div>' +
-    '<div class="ql-header-right">' +
-      '<button id="ql-checkout-back" class="ql-icon-btn" title="Back">←</button>' +
-      '<button id="ql-minimize" class="ql-icon-btn">' + (minimized ? '□' : '−') + '</button>' +
-    '</div>' +
-  '</div>' +
-  '<div id="ql-body">' +
-    '<div class="ql-pay-section" style="text-align:center">' +
-      '<div class="ql-pay-title">Request your license key on Discord</div>' +
-      '<div class="ql-selected-pkg">📦 <strong>' + escapeHtml(pkg.name || 'Selected plan') + '</strong></div>' +
-      '<p style="color:var(--ql-text-secondary);font-size:12px;line-height:1.5;margin:10px 0 16px">Support and license purchases are handled through the official Discord server.</p>' +
-      '<a href="' + QL_DISCORD_SUPPORT + '" target="_blank" rel="noopener noreferrer" class="ql-confirm-pay-btn" style="display:block;text-decoration:none;margin-bottom:10px">💬 Open Discord Support</a>' +
-      '<button id="ql-confirm-pay" class="ql-buy-btn" style="font-size:12px;width:100%">Open Discord</button>' +
-      '<div id="ql-pay-log" class="ql-pay-log"></div>' +
-    '</div>' +
-  '</div>' +
-  '<div id="ql-resize-handle" class="ql-resize-handle"></div>';
-}
-
-// ---- Template: Payment Success ----
-function templatePaymentSuccess(licenseKey) {
-  return '<div class="ql-pay-section" style="text-align:center;padding:24px 16px">' +
-    '<div style="font-size:48px;margin-bottom:12px">🎉</div>' +
-    '<div class="ql-pay-title">Discord Support Confirmed!</div>' +
-    '<p style="color:var(--ql-muted);font-size:12px;margin:8px 0 16px">Your license was activated successfully.</p>' +
-    '<div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;margin-bottom:12px">' +
-      '<p style="font-size:10px;color:var(--ql-muted);margin-bottom:4px">Your license key</p>' +
-      '<p id="ql-new-key" style="font-family:monospace;font-size:13px;color:var(--ql-accent);font-weight:600;word-break:break-all">' + escapeHtml(licenseKey) + '</p>' +
-    '</div>' +
-    '<button id="ql-copy-key" class="ql-confirm-pay-btn" style="margin-bottom:8px">📋 Copy Key</button>' +
-    '<p style="font-size:10px;color:var(--ql-muted);margin-bottom:12px">Paste the key above to activate the extension.</p>' +
-    '<button id="ql-activate-key" class="ql-buy-btn" style="font-size:12px">🔑 Activate Now</button>' +
-  '</div>';
-}
+// ---- Template: Payment Success (minimal) ----
+function templateWhatsAppPopup() { return ''; }
+function templateExpiredOverlay() { return ''; }

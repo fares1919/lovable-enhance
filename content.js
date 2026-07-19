@@ -9,8 +9,7 @@ const API_KEY = typeof POWERKITS_API_KEY !== "undefined" ? POWERKITS_API_KEY : G
 const PROXY_COMMAND_URL = (typeof window !== "undefined" && window.PROXY_COMMAND_URL)
   || (API_BASE + "/functions/v1/proxy-command");
 
-const DISCORD_URL = (typeof DISCORD_SUPPORT_URL !== "undefined" && DISCORD_SUPPORT_URL)
-  || "https://whatsapp.com/channel/0029VahcFkK0AgW2tNSlYf3t";
+// Floating UI configuration constants
 const VALIDATE_URL = API_BASE + "/functions/v1/validate-license";
 const OPTIMIZE_URL = API_BASE + "/functions/v1/optimize-prompt";
 const NOTIFICATIONS_URL = API_BASE + "/rest/v1/notifications?select=*&order=created_at.desc&limit=20";
@@ -543,16 +542,8 @@ function _buildFloatingUI(){
 }
 
 function showLicenseGate(box){
-  box.innerHTML = templateLicenseGate(qlMinimized);
-
-  setTimeout(() => {
-    const btn = document.getElementById("ql-validate-btn");
-    if(btn) btn.addEventListener("click", validateLicense);
-    const buyBtn = document.getElementById("ql-buy-license-btn");
-    if(buyBtn) buyBtn.addEventListener("click", () => window.open(DISCORD_URL, "_blank", "noopener,noreferrer"));
-    setupMinimize();
-    setupWhatsAppPopup();
-  }, 50);
+  // Disabled: floating UI suppressed in INTERNAL_LICENSE_MODE
+  console.log("[QL] License gate suppressed (internal mode)");
 }
 
 function _simpleHash(str) {
@@ -583,81 +574,8 @@ function validateLocalToken(token) {
 }
 
 async function validateLicense(){
-  const input = document.getElementById("ql-license-input");
-  const log = document.getElementById("ql-license-log");
-  const key = input ? input.value.trim() : "";
-
-  if(!key){
-    if(log){ log.className = "ql-log-error"; log.innerText = "⚠ Enter a key"; }
-    return;
-  }
-
-  if(log){ log.className = "ql-log-info"; log.innerText = "⏳ Validating..."; }
-
-  const localData = validateLocalToken(key);
-  if (localData) {
-    qlSessionId = localData.session_id;
-    qlUserName = normalizeLicenseUserName(localData.user_name);
-    qlLicenseStatus = "active";
-    chrome.storage.local.set({
-      ql_license_valid: true,
-      ql_license_key: key,
-      ql_session_id: qlSessionId,
-      ql_user_name: qlUserName,
-      ql_license_status: "active"
-    }, () => {
-      setPkCreditBypass(true);
-      if(log){ log.className = "ql-log-success"; log.innerText = "✓ Activation Successful!"; }
-      setTimeout(() => {
-        const box = document.getElementById("ql-floating");
-        if(box) showMainUI(box);
-      }, 800);
-    });
-    return;
-  }
-
-  try{
-    if(!qlDeviceId) qlDeviceId = await getDeviceId();
-
-    const data = await bgFetch(VALIDATE_URL, {
-      method: "POST",
-      headers: apiHeaders({ "Content-Type": "application/json" }),
-      body: JSON.stringify({ license_key: key, device_id: qlDeviceId, max_devices: 2, device_limit: 2, allowed_devices: 2 })
-    });
-
-    if(data.valid){
-      qlSessionId = data.session_id;
-      qlUserName = normalizeLicenseUserName(data.user_name);
-      qlApplyLicenseApiData(data);
-      qlOnlineCount = data.online_count || 0;
-
-      chrome.storage.local.set(Object.assign({
-        ql_license_valid: true,
-        ql_license_key: key,
-        ql_session_id: data.session_id,
-        ql_user_name: data.user_name || null
-      }, typeof pkLicenseStoragePatch === "function" ? pkLicenseStoragePatch(data) : {
-        ql_expires_at: data.expires_at || null,
-        ql_activated_at: data.activated_at || null,
-        ql_license_status: data.status || null
-      }), () => {
-        if (typeof pkInvalidateAssertCache === "function") pkInvalidateAssertCache();
-        qlExpiredHandled = false;
-        setPkCreditBypass(true);
-        if(log){ log.className = "ql-log-success"; log.innerText = "✓ " + qlUserText(data.message); }
-        try { if(typeof QLSounds!=="undefined") QLSounds.activation(); } catch(e){}
-        setTimeout(() => {
-          const box = document.getElementById("ql-floating");
-          if(box) showMainUI(box);
-          startHeartbeat(key);
-        }, 800);
-      });
-    } else {
-      if(log){ log.className = "ql-log-error"; log.innerText = "✗ " + qlUserText(data.message); }
-    }
-  }catch(err){
-    if(log){ log.className = "ql-log-error"; log.innerText = "✗ " + qlUserText(err.message || "Connection error"); }
-  }
+  // Disabled: license validation not needed in internal mode
+  console.log("[QL] License validation suppressed (internal mode)");
 }
 
 function showMainUI(box){
@@ -1594,18 +1512,9 @@ async function showPaymentUI(box, preselectedPkg){
   setupDrag();
   setupResize();
 
-  // BRL plans -> Discord redirect
+  // BRL plans -> Discord redirect (disabled)
   document.querySelectorAll(".ql-brl-buy").forEach(function(btn){
-    btn.addEventListener("click", function(){
-      var card = btn.closest(".ql-pkg-brl");
-      if(!card) return;
-      var idx = parseInt(card.getAttribute("data-brl-idx"), 10) || 0;
-      var plan = QL_BRL_PLANS[idx];
-      if(!plan) return;
-      var msg = "Hello! 👋 I am interested in the *" + plan.name + "* plan for Lovable Enhance (R$ " + plan.price + " - " + plan.period + ").\n\nOpen support for more information.";
-      var url = DISCORD_URL;
-      window.open(url, "_blank", "noopener,noreferrer");
-    });
+    btn.style.display = "none";
   });
 
   const backBtn = document.getElementById("ql-pay-back");
@@ -1683,8 +1592,7 @@ function showCheckoutScreen(box, pkg){
       const log = document.getElementById("ql-pay-log");
 
       if(!phoneInput){
-        window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
-        if(log){ log.className = "ql-pay-log ql-pay-info"; log.textContent = "Opening Discord support..."; }
+        console.log("[QL] Payment UI disabled in internal mode");
         return;
       }
 

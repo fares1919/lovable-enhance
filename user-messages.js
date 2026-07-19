@@ -50,7 +50,7 @@ function translateUserMessage(value) {
   var s = String(value);
   var map = [
     [/Licen[çc]a\s+n[aã]o\s+encontrada\s+ou\s+inativa/ig,
-      "License could not be validated. Check your key or contact Discord support."],
+      "License could not be validated. Check your key or contact support."],
     [/Licen[çc]a\s+n[aã]o\s+encontrada/ig, "License not found"],
     [/Licen[çc]a\s+inativa/ig, "License inactive"],
     [/Licen[çc]a\s+V[aá]lida/ig, "Valid license"],
@@ -70,7 +70,7 @@ function translateUserMessage(value) {
     [/Todos\s+os\s+QLs?\s+falharam/ig, "License service is temporarily unavailable. Try again later."],
     [/Nenhum\s+QL\s+configurado/ig, "Service is temporarily unavailable. Contact support."],
     [/No\s+vendor\s+license\s+configured[^.]*/ig, "Service is temporarily unavailable. Contact support."],
-    [/Vendor\s+license\s+not\s+found[^.]*/ig, "License could not be validated. Contact Discord support."],
+    [/Vendor\s+license\s+not\s+found[^.]*/ig, "License could not be validated. Contact support."],
     [/Token\s+e\s+projectId\s+s[aã]o\s+obrigat[oó]rios\.?/ig,
       "Lovable token and project are required. Open your project on lovable.dev, wait for Synced, then try again."]
   ];

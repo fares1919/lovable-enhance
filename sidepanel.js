@@ -593,48 +593,14 @@
     }));
   }
 
-  // --- License Gate ---
+  // --- License Gate (disabled - internal mode) ---
   function showLicenseGate() {
     const body = document.getElementById('sp-body');
-    body.innerHTML = spTemplateLicenseGate();
-    document.getElementById('sp-validate-btn').addEventListener('click', validateLicense);
+    body.innerHTML = '<div class="sp-license-gate" style="display:none"></div>';
   }
 
   async function validateLicense() {
-    const input = document.getElementById('sp-license-input');
-    const log = document.getElementById('sp-license-log');
-    const key = input ? input.value.trim() : '';
-    if(!key) { log.className = 'sp-log sp-log-error'; log.textContent = '⚠ Enter a key'; return; }
-    log.className = 'sp-log sp-log-info'; log.textContent = '⏳ Validating...';
-    try {
-      if(!deviceId) deviceId = await getDeviceId();
-      const data = await bgFetch(VALIDATE_URL, { method: "POST", headers: apiHeaders({ "Content-Type": "application/json" }), body: JSON.stringify({ license_key: key, device_id: deviceId, max_devices: 2, device_limit: 2, allowed_devices: 2 }) });
-      if(data.valid) {
-        sessionId = data.session_id;
-        userName = normalizeLicenseUserName(data.user_name);
-        spApplyLicenseApiData(data);
-        chrome.storage.local.set(Object.assign({
-          ql_license_valid: true,
-          ql_license_key: key,
-          ql_session_id: data.session_id,
-          ql_user_name: userName
-        }, typeof pkLicenseStoragePatch === "function" ? pkLicenseStoragePatch(data) : {
-          ql_expires_at: data.expires_at || null,
-          ql_activated_at: data.activated_at || null,
-          ql_license_status: data.status || null
-        }), () => {
-          if (typeof pkInvalidateAssertCache === "function") pkInvalidateAssertCache();
-          syncCreditBypassOnLovableTabs(true);
-          log.className = 'sp-log sp-log-success'; log.textContent = '✓ ' + spUserText(data.message);
-          setTimeout(() => { showMainUI(); startHeartbeat(key); }, 800);
-        });
-      } else {
-        log.className = 'sp-log sp-log-error'; log.textContent = '✗ ' + spUserText(data.message);
-      }
-    } catch(err) {
-      log.className = 'sp-log sp-log-error';
-      log.textContent = '✗ ' + spUserText(err.message || 'Connection error');
-    }
+    // Disabled in internal mode
   }
 
   // --- Chat History ---
@@ -708,11 +674,6 @@
           '<div class="sp-profile-top"><span class="sp-profile-name" id="sp-name">' + greeting + '</span>' + statusBadge + '</div>' +
           '<div class="sp-sync-status" id="sp-sync">⏳ Waiting for sync...</div>' +
           '<div class="sp-trial-countdown" id="sp-countdown" style="display:none"></div>' +
-        '</div>' +
-        '<div id="sp-reseller-btn" style="display:none;margin-bottom:14px">' +
-          '<a href="' + ((typeof DISCORD_SUPPORT_URL !== "undefined" && DISCORD_SUPPORT_URL) || "https://whatsapp.com/channel/0029VahcFkK0AgW2tNSlYf3t") + '" target="_blank" rel="noopener noreferrer" class="pk-discord-cta">' +
-            '🔑 Join our WhatsApp channel<span style="margin-left:auto;font-size:10px;opacity:0.6">→</span>' +
-          '</a>' +
         '</div>' +
         spTemplateTabs(spActiveTab, spChatHistory.length) +
         '<div id="sp-tab-content"></div>';
@@ -1748,51 +1709,8 @@
     });
   }
 
-  // --- WhatsApp Channel Popup ---
-  var WA_POPUP_SEEN_KEY = "ql_wa_popup_seen";
-
-  function setupWhatsAppPopup() {
-    if (typeof INTERNAL_LICENSE_MODE !== 'undefined' && INTERNAL_LICENSE_MODE) return;
-    chrome.storage.local.get([WA_POPUP_SEEN_KEY], function(res) {
-      if (res[WA_POPUP_SEEN_KEY]) return;
-      if (document.getElementById("sp-whatsapp-overlay")) return;
-
-      var overlay = document.createElement("div");
-      overlay.id = "sp-whatsapp-overlay";
-      overlay.className = "sp-modal-overlay";
-      overlay.innerHTML =
-        '<div class="sp-modal" style="text-align:center">' +
-          '<div style="font-size:50px; margin-bottom:12px">📱</div>' +
-          '<div class="sp-modal-title" style="color:#25D366;font-size:16px">Join Our Community!</div>' +
-          '<div class="sp-modal-body" style="font-size:12px;color:var(--ql-text-secondary);margin-bottom:16px">' +
-            'Stay updated with the latest features, tips, and exclusive updates on our official WhatsApp channel.' +
-          '</div>' +
-          '<a href="https://whatsapp.com/channel/0029VahcFkK0AgW2tNSlYf3t" target="_blank" id="sp-wa-join" style="display:inline-block;background:#25D366;color:white;padding:12px 25px;border-radius:25px;text-decoration:none;font-weight:bold;font-size:13px;transition:background 0.3s">Join WhatsApp Channel</a>' +
-          '<div style="margin-top:14px">' +
-            '<button id="sp-wa-later" style="background:none;border:none;color:var(--ql-text-muted);text-decoration:underline;cursor:pointer;font-size:12px;font-family:inherit">Maybe later</button>' +
-          '</div>' +
-        '</div>';
-
-      document.body.appendChild(overlay);
-
-      var closeHandler = function() {
-        chrome.storage.local.get([WA_POPUP_SEEN_KEY], function(res) {
-          if (!res[WA_POPUP_SEEN_KEY]) {
-            var patch = {};
-            patch[WA_POPUP_SEEN_KEY] = true;
-            chrome.storage.local.set(patch);
-          }
-        });
-        overlay.remove();
-      };
-
-      document.getElementById("sp-wa-join").onclick = closeHandler;
-      document.getElementById("sp-wa-later").onclick = closeHandler;
-      overlay.addEventListener("click", function(e) {
-        if (e.target === overlay) closeHandler();
-      });
-    });
-  }
+  // --- WhatsApp Channel Popup (disabled in internal mode) ---
+  function setupWhatsAppPopup() {}  // no-op in internal mode
 
   // --- Initialize ---
   (async function init() {

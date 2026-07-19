@@ -45,14 +45,7 @@ function spSanitizeUrl(url) {
 }
 
 function spTemplateLicenseGate() {
-  return '<div class="sp-license-gate">' +
-    '<div class="sp-lock-icon">🔐</div>' +
-    '<p class="sp-gate-title">Activate License</p>' +
-    '<p class="sp-gate-desc">Enter your license key to activate. Paste the key you received from Discord support or your reseller.</p>' +
-    '<input class="sp-input" id="sp-license-input" placeholder="Your license key" spellcheck="false">' +
-    '<button class="sp-btn-primary" id="sp-validate-btn">Validate License</button>' +
-    '<div class="sp-log" id="sp-license-log"></div>' +
-  '</div>';
+  return '<div class="sp-license-gate" style="display:none"></div>';
 }
 
 function spTemplateMainUI(greeting, statusBadge) {
@@ -62,12 +55,7 @@ function spTemplateMainUI(greeting, statusBadge) {
       '<div class="sp-sync-status" id="sp-sync">⏳ Waiting for sync...</div>' +
       '<div class="sp-trial-countdown" id="sp-countdown" style="display:none"></div>' +
     '</div>' +
-    '<div id="sp-reseller-btn" style="display:none;margin-bottom:14px">' +
-      '<a href="' + ((typeof DISCORD_SUPPORT_URL !== "undefined" && DISCORD_SUPPORT_URL) || "https://whatsapp.com/channel/0029VahcFkK0AgW2tNSlYf3t") + '" target="_blank" rel="noopener noreferrer" class="pk-discord-cta">' +
-        '🔑 Join our WhatsApp channel<span style="margin-left:auto;font-size:10px;opacity:0.6">→</span>' +
-      '</a>' +
-    '</div>' +
-    '<textarea class="sp-textarea" id="sp-msg" rows="3" placeholder="Type your command..." spellcheck="false"></textarea>' +
+   '<textarea class="sp-textarea" id="sp-msg" rows="3" placeholder="Type your command..." spellcheck="false"></textarea>' +
     '<div id="sp-attach-preview" class="sp-attach-preview" style="display:none"></div>' +
     '<div class="sp-action-bar">' +
       '<div class="sp-action-left"><label class="sp-toggle"><input type="checkbox" id="sp-modo-plano"><span class="sp-toggle-slider"></span></label><span class="sp-toggle-label">Plan</span></div>' +
