@@ -134,17 +134,9 @@ function templateMainUI(greeting, statusBadge, minimized) {
   '</div>';
 }
 
-// ---- Template: Expired License Overlay ----
+// ---- Template: Expired License Overlay (disabled in internal mode) ----
 function templateExpiredOverlay() {
-  return '<div class="ql-sweetalert-box">' +
-    '<div class="ql-sweetalert-icon">⏰</div>' +
-    '<h2 class="ql-sweetalert-title">License Expired!</h2>' +
-    '<p class="ql-sweetalert-text">Your license has expired. Open Discord support to renew it.</p>' +
-    '<div class="ql-sweetalert-actions">' +
-      '<button class="ql-sweetalert-btn ql-sweetalert-btn-primary" id="ql-sweetalert-renew">🌐 Open Discord</button>' +
-      '<button class="ql-sweetalert-btn ql-sweetalert-btn-secondary" id="ql-sweetalert-close">Close</button>' +
-    '</div>' +
-  '</div>';
+  return '<div style="display:none"></div>';
 }
 
 function qlTemplateUpdateBanner(version, changelog, dlUrl) {

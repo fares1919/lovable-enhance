@@ -1129,7 +1129,7 @@ function qlHandleLicenseInvalid(data) {
     handleLicenseExpired();
     return;
   }
-  qlRevokeAndShowLicenseGate((data && data.message) || "License not active.");
+  qlRevokeAndShowLicenseGate((data && data.message) || "This feature requires the side panel.");
 }
 
 function updateTrialCountdown(){
@@ -2237,7 +2237,7 @@ function setupSend(){
     if (!teamLicenseKey) {
       if (log) {
         log.className = "ql-log-error";
-        log.innerText = "⚠ Activate your license in the side panel first.";
+        log.innerText = "⚠ Please open the side panel to use this feature.";
       }
       return;
     }
