@@ -37,7 +37,7 @@
   _f('SEND_STRATEGY', 'native');
   _f('POWERKITS_DEBUG', false);
   _f('INTERNAL_LICENSE_MODE', true);
-  _f('SIDE_PANEL_ONLY', true);
+  _f('SIDE_PANEL_ONLY', false);
 
   try { if (Object.freeze) Object.freeze(_c); } catch(e) {}
   try {
